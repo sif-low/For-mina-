@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Siflow to Mina 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-pink: #ff758c;
+      --soft-pink: #ff7eb3;
+      --bg-pink: #fff0f5;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --accent-color: #ff3366;
+      --text-color: #4a4a4a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffe6eb 0%, #def3ff 50%, #fff0f5 100%);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      color: var(--text-color);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Hearts Background */
+    .bg-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-heart {
+      position: absolute;
+      color: rgba(255, 117, 140, 0.25);
+      animation: floatUp 8s infinite linear;
+      font-size: 1.5rem;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+    }
+
+    /* Music Toggle Button */
+    .music-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 100;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--primary-pink);
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .music-btn.playing {
+      animation: spin 4s linear infinite;
+      background: var(--primary-pink);
+      color: white;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Fullscreen Overlay Screens */
+    .screen {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Intro Screen */
+    #intro-screen {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+    }
+
+    .intro-title {
+      font-family: 'Fredoka One', cursive, 'Cairo';
+      font-size: 2.3rem;
+      color: white;
+      text-shadow: 2px 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .start-btn {
+      background: white;
+      color: var(--accent-color);
+      border: none;
+      padding: 15px 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 51, 102, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    /* 8 Seconds Loading Screen */
+    #loading-screen {
+      background: rgba(255, 240, 245, 0.98);
+      backdrop-filter: blur(10px);
+    }
+
+    .heart-svg {
+      width: 150px;
+      height: 150px;
+      fill: none;
+      stroke: var(--primary-pink);
+      stroke-width: 6;
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: drawHeart 8s linear forwards;
+      filter: drop-shadow(0 4px 8px rgba(255, 117, 140, 0.4));
+    }
+
+    @keyframes drawHeart {
+      100% { stroke-dashoffset: 0; fill: rgba(255, 117, 140, 0.15); }
+    }
+
+    .love-lang-text {
+      margin-top: 25px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      height: 40px;
+    }
+
+    .progress-bar-bg {
+      width: 220px;
+      height: 8px;
+      background: #ffd1dc;
+      border-radius: 10px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-color);
+      transition: width 0.1s linear;
+    }
+
+    /* Main App Interface */
+    #main-app {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 15px 40px 15px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(255, 182, 193, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+    }
+
+    .header-card h1 {
+      font-size: 1.8rem;
+      color: var(--accent-color);
+    }
+
+    /* Navigation Bar */
+    .nav-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 5px;
+      margin-bottom: 25px;
+      scrollbar-width: none;
+    }
+    .nav-container::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
+      flex: 0 0 auto;
+      background: white;
+      border: 2px solid #ffd1dc;
+      padding: 12px 20px;
+      border-radius: 25px;
+      color: #666;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, var(--primary-pink), var(--soft-pink));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 6px 15px rgba(255, 117, 140, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10deg); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+      border: 2px solid white;
+      margin-bottom: 25px;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .amina-text-block {
+      background: rgba(255, 255, 255, 0.7);
+      border-right: 4px solid var(--primary-pink);
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .amina-text-block .lang-en {
+      font-family: 'Poppins', sans-serif;
+      direction: ltr;
+      text-align: left;
+      color: #555;
+      font-size: 0.95rem;
+      background: #fafafa;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 8px;
+    }
+
+    /* Interactive Mirror */
+    .mirror-frame {
+      position: relative;
+      width: 260px;
+      height: 360px;
+      margin: 0 auto 20px auto;
+      border: 12px solid #ffd1dc;
+      border-radius: 130px 130px 40px 40px;
+      box-shadow: 0 15px 35px rgba(255, 117, 140, 0.3), inset 0 0 20px rgba(255,255,255,0.8);
+      overflow: hidden;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .mirror-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 1s ease, transform 0.5s ease;
+      filter: blur(25px) brightness(1.2);
+    }
+
+    .mirror-frame.revealed .mirror-img {
+      filter: blur(0px) brightness(1);
+    }
+
+    .mirror-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      font-weight: 800;
+      text-align: center;
+      padding: 15px;
+      transition: opacity 0.8s ease;
+    }
+
+    .mirror-frame.revealed .mirror-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .beauty-meter {
+      height: 18px;
+      background: #ffe6eb;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .beauty-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff758c, #ff3366);
+      transition: width 1.5s ease;
+    }
+
+    /* Cat Canvas */
+    .cat-canvas-container {
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(to bottom, #fff5f7, #ffe6eb);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    canvas#roseCanvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .give-rose-btn {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent-color), var(--primary-pink));
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    /* Tips Section */
+    .search-box {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: 2px solid #ffd1dc;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .tips-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .tip-card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      border: 1px solid #ffe1e8;
+    }
+
+    .tip-ar { font-weight: 600; color: #333; margin-bottom: 5px; }
+    .tip-en { font-family: 'Poppins'; direction: ltr; text-align: left; font-size: 0.85rem; color: #777; }
+
+    footer { text-align: center; padding: 20px 0; color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Hearts Container -->
+  <div class="bg-hearts" id="bgHearts"></div>
+
+  <!-- Audio Toggle Button -->
+  <button class="music-btn" id="musicToggle">🎵</button>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112185.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Intro Screen -->
+  <div class="screen" id="intro-screen">
+    <h1 class="intro-title">Developer Siflow to Mina 💖</h1>
+    <button class="start-btn" onclick="startApp()">Start 🥹🫶🏻</button>
+  </div>
+
+  <!-- 8 Seconds Loading Screen -->
+  <div class="screen hidden" id="loading-screen">
+    <div style="position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center;">
+      <svg class="heart-svg" viewBox="0 0 32 32">
+        <path d="M16,28.22 C16,28.22 3,18.25 3,10.66 C3,6.23 6.36,3 10.5,3 C13.06,3 15.11,4.36 16,6.24 C16.89,4.36 18.94,3 21.5,3 C25.64,3 29,6.23 29,10.66 C29,18.25 16,28.22 16,28.22 Z" />
+      </svg>
+    </div>
+    <div class="love-lang-text" id="loveText">أحبك</div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Main View -->
+  <div id="main-app">
+    <header>
+      <div class="header-card">
+        <h1>Developer Siflow 💗 Mina</h1>
+        <p>مرحباً بكِ في عالمكِ الخاص اللطيف يا أمينة 🌸👑</p>
+      </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <div class="nav-container">
+      <button class="nav-btn active" onclick="switchTab('who-is-amina', this)">?Who is Amina ✨</button>
+      <button class="nav-btn" onclick="switchTab('magic-mirror', this)">Magic Mirror 🪞</button>
+      <button class="nav-btn" onclick="switchTab('rose-mother', this)">A rose for mother 🌹</button>
+      <button class="nav-btn" onclick="switchTab('tips', this)">Tips for my little girl 💡</button>
+      <button class="nav-btn" onclick="switchTab('last-message', this)">My last message 💌</button>
+    </div>
+
+    <!-- TAB 1: Who is Amina -->
+    <div id="who-is-amina" class="tab-content active">
+      <div class="card">
+        <h2 class="card-title">Who is Amina? ✨</h2>
+        
+        <div class="amina-text-block">
+          <p>أمينة ماشي طفلة وخلاص وماشي وحدة برك أنت حياتي وأنت عينيا أنت ماما وأنت الدم لي يمشي فيا أنت بنتي الصغيرة وختي لكبيرة لكلام مايوصفكش والهدرة ماتلحقكش جامي كنتي طفلة برك فحياتي لعكس كنت لبنادم لواحيد لي منور عليا لحياة ولي بدلي تخمامي من بزاف جيهات وخلاني وحفزني باش نعيش ونحضر لكامل ليامات.</p>
+          <div class="lang-en">
+            Amina isn't just any girl, and she's not just one person among others; you are my life and you are my eyes. You're my mom and the blood running through my veins, you're my little daughter and my big sister. Words can't describe you, and talk won't ever reach your worth. You were never just a girl in my life—on the contrary, you were the only human being who lit up my life, changed my perspective on so many things, and pushed and motivated me to live and show up for all my days.
+          </div>
+        </div>
+
+        <div class="amina-text-block">
+          <p>صح كاين يامات نغلط فيهم معاك بصح هذا ماشي كره ليك ولا حقد عليك بلعكس راهو حب وخوف كبير عليك تعرفي بلي أنت كلش عندي بمعنى يفوت معنى تاع كلام برك أنت لي تخليني نخمم نفطن غدوة باش نلقاك وباش نشوفك ونسمع صوتك وأنت لي كل خطرة تنسيني فجروح كبار كبرو مع زمان وأنت هي لي ضحكيني وتسمعيني بلا نقسان وبلا ماتلوميني وملي عرفتيني كنت سند ليا ومنبع تاع حنان.</p>
+          <div class="lang-en">
+            True, there are days I make mistakes with you, but that's not out of hatred or grudge against you; on the contrary, it's out of a huge love and deep fear for you. You know you mean everything to me, way beyond just the literal meaning of words. You're the one who makes me think and wake up tomorrow just to find you, see you, and hear your voice. And you're the one who every single time makes me forget big wounds that grew with time. You're the one who makes me laugh and listens to me without missing a thing and without blaming me. Ever since you got to know me, you've been my support and a source of endless tenderness.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Magic Mirror -->
+    <div id="magic-mirror" class="tab-content">
+      <div class="card" style="text-align: center;">
+        <h2 class="card-title">The Magic Mirror of Mina 🪞✨</h2>
+        <p style="color: #666; margin-bottom: 15px;">اضغطي على المرآة لتكتشفي أجمل فتاة في العالم 💕</p>
+        
+        <div class="mirror-frame" id="mirrorFrame" onclick="revealMirror()">
+          <img src="https://images2.imgbox.com/39/38/c5v3sU5U_o.jpg" class="mirror-img" alt="Mina">
+          <div class="mirror-overlay">
+            ✨ مسحي الضباب واكتشفي الملكة ✨
+          </div>
+        </div>
+
+        <div id="beautyScore" style="display: none;">
+          <h3 style="color: var(--accent-color);">ميزان الأناقة والجمال: <span style="font-size: 1.5rem;">1000% ♾️💖</span></h3>
+          <div class="beauty-meter">
+            <div class="beauty-fill" id="beautyFill"></div>
+          </div>
+          <p style="margin-top: 10px; font-weight: 600; color: #555;">أنتِ دائمًا أجمل وأرق إنسانة على وجه الأرض! 👑🌸</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Rose for mother -->
+    <div id="rose-mother" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">A rose for the most beautiful♾️ mother in the world 🌹</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 15px;">اضغطي على الزر أسفله لتستلمي باقة الورد الخاصة بكِ من القطة اللطيفة 💕</p>
+        
+        <div class="cat-canvas-container">
+          <canvas id="roseCanvas"></canvas>
+        </div>
+
+        <button class="give-rose-btn" onclick="triggerRoseAnimation()">إستلام باقة الورود 💐❤️</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: Tips -->
+    <div id="tips" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">Tips for my beautiful little girl 💡</h2>
+        <p style="text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 15px;">50 نصيحة ذهبية ومحبة لحياتك اليومية 🌸</p>
+        
+        <input type="text" class="search-box" id="tipSearch" placeholder="ابحثي في النصائح..." oninput="filterTips()">
+        
+        <div class="tips-grid" id="tipsGrid"></div>
+      </div>
+    </div>
+
+    <!-- TAB 5: My last message -->
+    <div id="last-message" class="tab-content">
+      <div class="card">
+        <h2 class="card-title">My last message to you 🌹</h2>
+        <div style="background: #fffdfa; border: 1px solid #fce4ec; padding: 25px; border-radius: 20px;">
+          <div style="line-height: 2; font-size: 1.05rem; color: #333; margin-bottom: 20px;">
+            يا أغلى من مرّ على فؤادي، ويا من ملكتِ الروَّحَ والعقل...<br><br>
+            حين يخطر طيفكِ ببالي، أشعر وكأنني أنفصل عن هذا العالم بأسره لألوذ بعالمٍ لا يسكنه سوايا وسواكِ. إن حبي لكِ ليس شعوراً عابراً، بل هو غرامٌ جارف، واضح جلء الشمس، وشغفٌ يأخذني بعيداً عن صاخب الحياة وروتينها الرتيب، لأحلم بيومٍ أضمكِ فيه إلى جانبي ونمضي معاً في رحلةٍ لا تنتهي، نسافر بلا ميعاد، ونطوي المسافات خطوة بخطوة وأنتِ تقبضين على كفي.<br><br>
+            أراكِ في خيالي تبتسمين فتزول عن كاهلي أثقال الدهر، وأسمع صدى صوتكِ فيعيدني إلى الحياة. معكِ، تصبح أي بقعةٍ في الأرض جنةً ووطناً. أنتِ لستِ مجرد إنسانة أحبها، بل أنتِ المنفى والملاذ، وأجمل مغامرةٍ خطها القدر في عمري. أحبكِ حباً عميقاً، لا يعرف الخوف ولا الحدود... أحبكِ إلى أبد الآبدين.
+          </div>
+
+          <div style="font-family: 'Poppins', sans-serif; direction: ltr; text-align: left; line-height: 1.8; font-size: 0.95rem; color: #555; border-top: 1px dashed #ffd1dc; padding-top: 20px;">
+            <strong>My dearest, the one who captured my heart, and the sovereign of my soul and mind...</strong><br><br>
+            Whenever your phantom crosses my mind, I feel as though I am detaching from this entire world, retreating into a realm inhabited by none other than you and me. My love for you is not a fleeting emotion; rather, it is an overwhelming affection, crystal-clear and bold—a passion that pulls me far away from the noise and dull routine of life. I dream of the day when I hold you close, wandering together on an endless journey, traveling without a schedule, crossing distances step by step while your hand is locked in mine.<br><br>
+            I picture you smiling, and the heavy burdens of time fade away; I hear the echo of your voice, and it breathes life back into me. With you, every patch of earth becomes a paradise and a homeland. You are not merely someone I love; you are my sanctuary, my refuge, and the most magnificent adventure destiny has ever written into my life. I love you with a profound, fearless, and boundless love... I will love you until the end of time.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      💖 Crafted with Endless Love by Developer Siflow for Mina 💖
+    </footer>
+  </div>
+
+  <script>
+    // Audio Player Control
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggle');
+    let isPlaying = false;
+
+    function toggleMusic() {
+      if (isPlaying) {
+        bgMusic.pause();
+        musicBtn.classList.remove('playing');
+        isPlaying = false;
+      } else {
+        bgMusic.play().then(() => {
+          musicBtn.classList.add('playing');
+          isPlaying = true;
+        }).catch(err => console.log("Audio block", err));
+      }
+    }
+    musicBtn.addEventListener('click', toggleMusic);
+
+    // Dynamic Floating Background Hearts
+    const bgHearts = document.getElementById('bgHearts');
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'bg-heart';
+      heart.innerHTML = '💗';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      bgHearts.appendChild(heart);
+    }
+
+    const loveLanguages = [
+      "أحبك 🇩🇿", "I Love You 🇬🇧", "Je t'aime 🇫🇷", "Te amo 🇪🇸", 
+      "Ich liebe dich 🇩🇪", "Ti amo 🇮🇹", "Eu te amo 🇵🇹", "Я тебя люблю 🇷🇺",
+      "أحبك يا أمينة 💖", "Forever & Always ✨"
+    ];
+
+    function startApp() {
+      bgMusic.play().then(() => {
+        musicBtn.classList.add('playing');
+        isPlaying = true;
+      }).catch(() => {});
+
+      document.getElementById('intro-screen').classList.add('hidden');
+      document.getElementById('loading-screen').classList.remove('hidden');
+
+      const duration = 8000;
+      const startTime = Date.now();
+      const loveTextElem = document.getElementById('loveText');
+      const progressFill = document.getElementById('progressFill');
+
+      let langIndex = 0;
+      const langInterval = setInterval(() => {
+        langIndex = (langIndex + 1) % loveLanguages.length;
+        loveTextElem.style.opacity = 0;
+        setTimeout(() => {
+          loveTextElem.textContent = loveLanguages[langIndex];
+          loveTextElem.style.opacity = 1;
+        }, 150);
+      }, 800);
+
+      const progressInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const percentage = Math.min((elapsed / duration) * 100, 100);
+        progressFill.style.width = percentage + '%';
+
+        if (elapsed >= duration) {
+          clearInterval(progressInterval);
+          clearInterval(langInterval);
+          document.getElementById('loading-screen').classList.add('hidden');
+        }
+      }, 50);
+    }
+
+    // Tab Navigation Logic
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+
+      if (tabId === 'rose-mother') {
+        initCatCanvas();
+      }
+    }
+
+    // Mirror Reveal Logic
+    function revealMirror() {
+      const frame = document.getElementById('mirrorFrame');
+      frame.classList.add('revealed');
+      document.getElementById('beautyScore').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('beautyFill').style.width = '100%';
+      }, 100);
+    }
+
+    // Cat & Bouquet Canvas
+    let canvas, ctx;
+    let particles = [];
+
+    function initCatCanvas() {
+      canvas = document.getElementById('roseCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+      drawCatScene();
+    }
+
+    function drawCatScene() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2 + 20;
+
+      ctx.save();
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#4a4a4a";
+      ctx.lineWidth = 4;
+
+      // Ears
+      ctx.beginPath(); ctx.moveTo(cx - 65, cy - 40); ctx.lineTo(cx - 45, cy - 85); ctx.lineTo(cx - 15, cy - 60); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 65, cy - 40); ctx.lineTo(cx + 45, cy - 85); ctx.lineTo(cx + 15, cy - 60); ctx.fill(); ctx.stroke();
+
+      // Head
+      ctx.beginPath(); ctx.ellipse(cx, cy - 25, 75, 55, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+      // Eyes & Nose
+      ctx.fillStyle = "#333333";
+      ctx.beginPath(); ctx.ellipse(cx - 35, cy - 25, 7, 10, 0, 0, Math.PI * 2); ctx.ellipse(cx + 35, cy - 25, 7, 10, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#ffb703";
+      ctx.beginPath(); ctx.ellipse(cx, cy - 15, 6, 4, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Pink Bow
+      ctx.fillStyle = "#ff3366";
+      ctx.beginPath(); ctx.arc(cx - 45, cy - 65, 12, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx - 60, cy - 70, 16, 10, -0.3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx - 30, cy - 60, 16, 10, 0.3, 0, Math.PI*2); ctx.fill();
+
+      // Bouquet
+      ctx.fillStyle = "#ff4d6d";
+      ctx.beginPath(); ctx.arc(cx, cy + 15, 22, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx - 15, cy + 20, 18, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx + 15, cy + 20, 18, 0, Math.PI*2); ctx.fill();
+      
+      ctx.restore();
+
+      // Particles
+      particles.forEach((p, index) => {
+        ctx.fillStyle = `rgba(255, 51, 102, ${p.alpha})`;
+        ctx.font = `${p.size}px sans-serif`;
+        ctx.fillText('💖', p.x, p.y);
+        p.y -= p.speed;
+        p.alpha -= 0.01;
+        if (p.alpha <= 0) particles.splice(index, 1);
+      });
+
+      if (particles.length > 0) requestAnimationFrame(drawCatScene);
+    }
+
+    function triggerRoseAnimation() {
+      for (let i = 0; i < 20; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() * 100 - 50),
+          y: canvas.height / 2 + 20,
+          size: Math.random() * 20 + 15,
+          speed: Math.random() * 3 + 1,
+          alpha: 1
+        });
+      }
+      drawCatScene();
+    }
+
+    // 50 Tips Data Array
+    const tipsData = [
+      { ar: "1. كوني دائماً قريبة من نفسك ولا تفقدي أبداً هويتك المميزة من أجل أي شخص.", en: "Always stay close to yourself and never lose your unique identity for anyone." },
+      { ar: "2. ابتسمي دائماً، فابتسامتك تضيء الأيام وتغير وجه العالم من حولك.", en: "Always smile; your smile brightens the days and changes the world around you." },
+      { ar: "3. الثقة بالنفس هي أجمل تاج ترتدينه، فكوني واثقة دائماً بخطواتك.", en: "Self-confidence is the most beautiful crown you can wear, so always be confident in your steps." },
+      { ar: "4. اهتمي بصحتك جيداً، فهي الكنز الحقيقي الذي لا يقدر بثمن.", en: "Take good care of your health, for it is the true, priceless treasure." },
+      { ar: "5. لا تشغلي بالك بكلام الناس، فإرضاء الجميع غاية لا تدرك.", en: "Don't let people's opinions occupy your mind, because pleasing everyone is an unattainable goal." },
+      { ar: "6. كوني قوية في مواجهة صعاب الحياة، فخلف كل محنة منحة.", en: "Be strong in the face of life's hardships, for behind every trial lies a blessing." },
+      { ar: "7. تعلمي من أخطائك، فهي ليست سوى دروس مجانية تقدمها لكِ الأيام.", en: "Learn from your mistakes; they are nothing more than free lessons given to you by days." },
+      { ar: "8. حافظي على نقاء قلبك وطيبة سريرتك، مهما تغيرت الظروف.", en: "Maintain the purity of your heart and the goodness of your intentions, no matter how circumstances change." },
+      { ar: "9. اقرئي واكتشفي العالم، فالعقل الواعي هو أجمّل زينة للمرأة.", en: "Read and discover the world; a conscious mind is a woman's most beautiful ornament." },
+      { ar: "10. لا تقارني حياتك بحياة أحد، فرزقك وتوقيتك يختلفان تماماً عن غيرك.", en: "Never compare your life to anyone else's; your provision and timing are completely different from theirs." },
+      { ar: "11. كوني كريمة بمشاعرك وكلماتك الطيبة مع من تحبين.", en: "Be generous with your feelings and kind words toward those you love." },
+      { ar: "12. امنحي نفسك الوقت الكافي للراحة والاسترخاء بعيداً عن ضغوط الحياة.", en: "Give yourself enough time to rest and relax away from the pressures of life." },
+      { ar: "13. استشيري قلبك وعقلك معاً قبل اتخاذ أي خطوة مصيرية.", en: "Consult both your heart and your mind before taking any fateful step." },
+      { ar: "14. كوني حنونة مع نفسك ولا تضغطي عليها فوق طاقتها.", en: "Be gentle with yourself and don't push it beyond its capacity." },
+      { ar: "15. احترمي حدودك الذاتية ولا تسمحي لأحد بتجاوزها.", en: "Respect your personal boundaries and never allow anyone to cross them." },
+      { ar: "16. اجعلي الصدق مبدأك الأول في كل تعاملاتك.", en: "Make honesty your primary principle in all your dealings." },
+      { ar: "17. ابحثي دائماً عن الأشياء البسيطة التي تصنع سعادتك اليومية.", en: "Always look for the simple things that create your daily happiness." },
+      { ar: "18. كوني سندا لنفسك أولاً، قبل أن تنتظري السند من أحد.", en: "Be your own support first, before expecting support from anyone else." },
+      { ar: "19. تذكري أن كل دقيقة تمر لا تعود، فعيشيها بفرح وسلام.", en: "Remember that every passing minute never returns, so live it with joy and peace." },
+      { ar: "20. حافظي على صلاتك وعلاقتك بخالقك، فهي مصدر طمأنينتك.", en: "Maintain your prayers and your connection with your Creator, for it is the source of your tranquility." },
+      { ar: "21. لا تخافي من الفشل، فهو مجرد بداية جديدة لطريق النجاح.", en: "Don't fear failure; it is simply a new beginning on the road to success." },
+      { ar: "22. أحبي ملامحك وتفاصيلك الصغيرة التي تجعلك مختلفة وفريدة.", en: "Love your facial features and the small details that make you different and unique." },
+      { ar: "23. اختاري أصدقاءك بعناية، فالصاحب ساحب ومؤثر حقيقي.", en: "Choose your friends carefully, for a companion is a true and influential guide." },
+      { ar: "24. كوني صبورة، فالأشياء الجميلة تأتي لمن ينتظرها بقلب راضٍ.", en: "Be patient, for the most beautiful things come to those who wait with a content heart." },
+      { ar: "25. سافري واكتشفي أماكن جديدة متى سنحت لكِ الفرصة لتوسيع أفقك.", en: "Travel and discover new places whenever you have the opportunity to broaden your horizons." },
+      { ar: "26. لا تدعي الحزن يسرق منك أيامك الجميلة، فغد أجمل بإذن الله.", en: "Don't let sadness steal your beautiful days; tomorrow is brighter, God willing." },
+      { ar: "27. كوني مستمعة جيدة لمن يحتاج إليك، فالحنان عطاء عظيم.", en: "Be a good listener to anyone who needs you, for tenderness is a great gift." },
+      { ar: "28. حافظي على عزة نفسك وكرامتك فوق كل اعتبار.", en: "Preserve your self-esteem and dignity above all else." },
+      { ar: "29. ابتعدي عن كل طاقة سلبية ومكان يرهق روحك وقلبك.", en: "Stay away from any negative energy and any place that drains your soul and heart." },
+      { ar: "30. كوني طموحة ولا ترضي أبداً بالقليل ما دام المستطاع ممكناً.", en: "Be ambitious and never settle for less as long as what's possible is within reach." },
+      { ar: "31. اهتمي بتفاصيل يومك واصنعي طقوسك الخاصة التي تسعدك.", en: "Take care of the details of your day and create your own rituals that bring you happiness." },
+      { ar: "32. كوني متفائلة، فالأمل يفتح أبواباً لم تكن تدور بخلدك.", en: "Be optimistic, for hope opens doors you never imagined." },
+      { ar: "33. احرصي على النوم المبكر والغذاء الصحي ليبقى وجهك نضراً.", en: "Make sure to sleep early and eat healthy to keep your face glowing and fresh." },
+      { ar: "34. لا تبخلي على نفسك بكلمات التشجيع والمدح المستمر.", en: "Don't skimp on words of encouragement and continuous praise for yourself." },
+      { ar: "35. سامحي واصفحي، ليس حباً في الآخرين، بل راحة لقلبك أنتِ.", en: "Forgive and overlook—not out of love for others, but for the peace of your own heart." },
+      { ar: "36. كوني مستقلة فكرياً ومادياً بقدر ما تستطيعين.", en: "Be as intellectually and financially independent as you possibly can." },
+      { ar: "37. اجعلي حبك لنفسك قاعدة أساسية لكل علاقاتك مع الآخرين.", en: "Make self-love the foundational base for all your relationships with others." },
+      { ar: "38. كوني كالشجرة العالية، تثمرين خيراً ولا تهزك الرياح العابرة.", en: "Be like a tall tree that bears good fruit and is not shaken by passing winds." },
+      { ar: "39. لا تقولي كلمة جارحة قد تندمي على قولها لاحقاً.", en: "Never say a hurtful word that you might regret saying later." },
+      { ar: "40. حافظي على طفولتك البريئة وضحكتك العفوية مهما كبرتِ.", en: "Preserve your innocent childhood and spontaneous laughter no matter how much you grow up." },
+      { ar: "41. كوني ممتنة دائماً للنعم الصغيرة والكبيرة المحيطة بك.", en: "Always be grateful for the small and big blessings surrounding you." },
+      { ar: "42. تعلمي قول \"لا\" بثقة عندما لا ترغبين في فعل شيء ما.", en: "Learn to say \"No\" with confidence when you don't wish to do something." },
+      { ar: "43. اجعلي القراءة والكتابة ملاذاً آمناً لأفكارك ومشاعرك.", en: "Make reading and writing a safe haven for your thoughts and feelings." },
+      { ar: "44. كوني مصدر بهجة لمن حولك ودعِ أثرك طيباً أينما حللتِ.", en: "Be a source of joy for those around you and leave a good impression wherever you go." },
+      { ar: "45. حافظي على أسرارك الخاصة، فالغموض أحياناً يمنحك قوة وهيبة.", en: "Keep your personal secrets; mystery sometimes grants you strength and dignity." },
+      { ar: "46. لا تقلقي بشأن المستقبل، فهو بيد خالق حكيم مدبر.", en: "Don't worry about the future, for it is in the hands of a Wise and Providential Creator." },
+      { ar: "47. كوني رحيمة بالحيوانات والضعفاء، فالقلب الطيب عنوان الجمال الحقيقي.", en: "Be merciful to animals and the weak; a kind heart is the ultimate address of true beauty." },
+      { ar: "48. احرصي على تعلم مهارات جديدة باستمرار لتطوير ذاتك.", en: "Make sure to constantly learn new skills to develop yourself." },
+      { ar: "49. تذكري دائماً أنكِ قوية قادرة على تجاوز كل العقبات.", en: "Always remember that you are strong and capable of overcoming all obstacles." },
+      { ar: "50. كوني على يقين تام بأنكِ إنسانة فريدة، تستحقين كل الحب والخير والسعادة في هذا العالم.", en: "Be firmly certain that you are a unique human being who deserves all the love, goodness, and happiness in this world." }
+    ];
+
+    function renderTips(data) {
+      const tipsGrid = document.getElementById('tipsGrid');
+      tipsGrid.innerHTML = '';
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'tip-card';
+        div.innerHTML = `<div class="tip-ar">${item.ar}</div><div class="tip-en">${item.en}</div>`;
+        tipsGrid.appendChild(div);
+      });
+    }
+
+    function filterTips() {
+      const q = document.getElementById('tipSearch').value.toLowerCase();
+      renderTips(tipsData.filter(t => t.ar.toLowerCase().includes(q) || t.en.toLowerCase().includes(q)));
+    }
+
+    renderTips(tipsData);
+  </script>
+</body>
+</html>
