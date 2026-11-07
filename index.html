@@ -183,6 +183,9 @@
             <button class="tab-btn px-4 py-2.5 md:px-5 md:py-3 rounded-2xl font-bold text-xs md:text-sm bg-white text-pink-600 border border-pink-200 hover:bg-pink-100 transition shadow-sm flex items-center gap-2" onclick="switchTab('roseTab')">
                 <span>🌹 A rose for mother</span>
             </button>
+            <button class="tab-btn px-4 py-2.5 md:px-5 md:py-3 rounded-2xl font-bold text-xs md:text-sm bg-white text-pink-600 border border-pink-200 hover:bg-pink-100 transition shadow-sm flex items-center gap-2" onclick="switchTab('mirrorTab')">
+                <span>🪞 مرآة أمينة</span>
+            </button>
             <button class="tab-btn px-4 py-2.5 md:px-5 md:py-3 rounded-2xl font-bold text-xs md:text-sm bg-white text-pink-600 border border-pink-200 hover:bg-pink-100 transition shadow-sm flex items-center gap-2" onclick="switchTab('tipsTab')">
                 <span>💡 Tips for my little girl</span>
             </button>
@@ -254,8 +257,7 @@
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
                     <button id="giveRoseBtn" class="pulse-glow bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-bold text-lg px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition flex items-center gap-2">
-                        <i class="fas fa-heart text-xl"></i>
-                        <span>إستلام باقة الورود 💐</span>
+                        <i class="fas fa-heart text-xl"><span>إستلام باقة الورود 💐</span></i>
                     </button>
                 </div>
                 
@@ -265,7 +267,45 @@
             </div>
         </section>
 
-        <!-- TAB 3: TIPS FOR MY BEAUTIFUL LITTLE GIRL -->
+        <!-- TAB 3: AMINA'S MAGICAL MIRROR -->
+        <section id="mirrorTab" class="tab-content hidden">
+            <div class="glass-card rounded-3xl p-6 md:p-10 shadow-2xl border-2 border-pink-300 text-center relative overflow-hidden bg-gradient-to-b from-white/90 to-pink-50/90">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100 text-pink-600 font-bold text-xs md:text-sm mb-3">
+                    <span>🪞 مرآة السحر والجمال 🪞</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-pink-600 mb-2 font-cairo">
+                    من هي أجمل إنسانة في الوجود؟ ✨
+                </h2>
+                <p class="text-pink-500 font-semibold mb-6 text-sm md:text-base">
+                    اضغطي على المرآة أدناه لتكتشفي من ترء عيناي كل يوم 👑💖
+                </p>
+
+                <!-- Mirror Container -->
+                <div class="relative max-w-sm mx-auto flex flex-col items-center justify-center py-4">
+                    <!-- Mirror Frame Button -->
+                    <div id="mirrorBtn" onclick="revealMirrorImage()" class="w-48 h-64 md:w-56 md:h-72 rounded-[100px] border-8 border-pink-400 bg-gradient-to-tr from-pink-200 via-pink-100 to-white shadow-2xl cursor-pointer transform hover:scale-105 transition-all duration-300 flex items-center justify-center relative overflow-hidden pulse-glow group">
+                        <div id="mirrorPlaceholder" class="flex flex-col items-center justify-center text-pink-500 p-4 transition-opacity duration-500">
+                            <i class="fas fa-wand-magic-sparkles text-4xl mb-3 animate-bounce"></i>
+                            <span class="font-bold text-sm md:text-base">اضغطي هنا لفتح المرآة 🪞</span>
+                        </div>
+                        
+                        <!-- Real Photo Display -->
+                        <div id="mirrorContent" class="absolute inset-0 opacity-0 transition-all duration-700 pointer-events-none flex items-center justify-center bg-pink-900 overflow-hidden rounded-[90px]">
+                            <img src="IMG_20261104_200724_311.jpg" alt="Amina" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-pink-950/60 via-transparent to-transparent flex items-end justify-center pb-4">
+                                <span class="text-white font-bold text-sm bg-pink-600/80 px-4 py-1 rounded-full backdrop-blur-sm">أميرتي الجميلة 👑💖</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mirrorMsg" class="mt-6 text-pink-600 font-bold text-lg opacity-0 transition-opacity duration-700">
+                    "أجمل صورة وأغلى وجه يزين حياتي كل يوم.. ربي يخليك ليا يا أمينة!" 🌸♾️
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: TIPS FOR MY BEAUTIFUL LITTLE GIRL -->
         <section id="tipsTab" class="tab-content hidden">
             <div class="glass-card rounded-3xl p-6 md:p-8 shadow-xl border border-pink-200 mb-6">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -287,7 +327,7 @@
             </div>
         </section>
 
-        <!-- TAB 4: MY LAST MESSAGE TO YOU -->
+        <!-- TAB 5: MY LAST MESSAGE TO YOU -->
         <section id="messageTab" class="tab-content hidden">
             <div class="glass-card rounded-3xl p-6 md:p-10 shadow-2xl border-2 border-pink-300 relative overflow-hidden bg-gradient-to-b from-white/90 to-pink-50/90">
                 <div class="text-center mb-8">
@@ -517,6 +557,49 @@
             }
 
             ctx.restore();
+        }
+
+        // --- MIRROR REVEAL FUNCTION ---
+        function revealMirrorImage() {
+            const placeholder = document.getElementById('mirrorPlaceholder');
+            const content = document.getElementById('mirrorContent');
+            const msg = document.getElementById('mirrorMsg');
+
+            placeholder.style.opacity = '0';
+            setTimeout(() => {
+                placeholder.style.display = 'none';
+                content.classList.remove('opacity-0', 'pointer-events-none');
+                msg.classList.remove('opacity-0');
+            }, 300);
+
+            // Trigger floating hearts effect around mirror
+            const mirrorBtn = document.getElementById('mirrorBtn');
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => createMirrorParticle(mirrorBtn), i * 80);
+            }
+        }
+
+        function createMirrorParticle(parent) {
+            const heart = document.createElement('div');
+            const icons = ['✨', '💖', '🌸', '💫', '💗'];
+            heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+            heart.className = 'absolute text-2xl pointer-events-none transition-all duration-1000 z-30';
+            heart.style.left = '50%';
+            heart.style.top = '50%';
+            document.body.appendChild(heart);
+
+            const rect = parent.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+            heart.style.left = startX + 'px';
+            heart.style.top = startY + 'px';
+
+            setTimeout(() => {
+                heart.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * -150 - 50}px) scale(1.5)`;
+                heart.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => heart.remove(), 1100);
         }
 
         function switchTab(tabId) {
@@ -768,7 +851,7 @@
 
         function playAudio() {
             bgAudio.play().then(() => {
-                isAudioPlaying = true;
+                isAudioPlaying = status = true;
                 musicIcon.className = "fas fa-heart text-pink-500 animate-bounce";
             }).catch(e => console.log('Audio auto-play prevented:', e));
         }
